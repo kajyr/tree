@@ -1,0 +1,24 @@
+{
+  "command": {
+    "publish": {
+      "allowBranch": "main",
+      "conventionalCommits": true,
+      "ignoreChanges": [
+        "*.test.js",
+        "*.test.ts",
+        "*.test.tsx",
+        "*.md"
+      ],
+      "message": "chore(release): publish"
+    },
+    "version": {
+      "conventionalCommits": true
+    }
+  },
+  "packages": [
+    "frontend",
+    "backend"
+  ],
+  "useNx": true,
+  "version": "1.7.0"
+}

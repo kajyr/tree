@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "esModuleInterop": true,
+    "importHelpers": true,
+    "jsx": "react",
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "paths": {
+      "helpers/*": ["./helpers/*"],
+      "dal/*": ["./dal/*"]
+    },
+    "outDir": "../build-backend",
+    "lib": ["es2019"],
+    "sourceMap": true,
+    "strict": true,
+    "target": "es5",
+    "types": ["jest", "node"]
+  },
+  "include": ["./"],
+  "exclude": ["node_modules", "**/*.test.ts"]
+}
