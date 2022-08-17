@@ -11,14 +11,15 @@ async function build(opts: Options) {
   app.register(require('fastify-log'));
   app.register(require('fastify-routes-table'));
 
-  await app.register(require('./bootstrap'));
-
   await app.register(require('@fastify/mongodb'), {
     // force to close the mongodb connection when app stopped
     // the default value is false
     forceClose: true,
     url: opts.mongoUrl
   });
+
+  //await app.register(require('./bootstrap'));
+  await app.register(require('./persons'));
 
   // Block other api
   app.route({

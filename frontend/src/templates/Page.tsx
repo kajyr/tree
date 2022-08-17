@@ -8,7 +8,7 @@ const Page: FC<{ children: ReactNode }> = ({ children }) => (
     <AppShell
       padding="md"
       navbar={
-        <Navbar width={{ base: 300 }} height={500} p="xs">
+        <Navbar width={{ base: 300 }} p="xs">
           <Navbar.Section>nav header</Navbar.Section>
           <Navbar.Section grow mt="md">
             nav links

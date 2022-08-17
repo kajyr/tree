@@ -10,8 +10,8 @@ import Page from 'templates/Page';
 import Dashboard from 'pages/dashboard';
 
 const App: FC = () => {
-  const { isLoading, data } = useQuery<Api.BootstrapResponse>('bootstrap', () =>
-    fetch('/api/bootstrap').then(res => res.json())
+  const { isLoading, data } = useQuery<Api.PersonsListResponse>('bootstrap', () =>
+    fetch('/api/persons').then(res => res.json())
   );
 
   if (isLoading || !data) {
