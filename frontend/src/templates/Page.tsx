@@ -1,7 +1,7 @@
 import React, { FC, ReactNode } from 'react';
 
 import { AppShell, Badge, Button, Divider, Group, Header, Navbar, Title } from '@mantine/core';
-import { GitHubLogoIcon } from '@radix-ui/react-icons';
+import { IconBrandGithub } from '@tabler/icons';
 
 const Page: FC<{ children: ReactNode }> = ({ children }) => (
   <>
@@ -23,7 +23,7 @@ const Page: FC<{ children: ReactNode }> = ({ children }) => (
                 target="_blank"
                 rel="noopener noreferrer"
                 variant="outline"
-                leftIcon={<GitHubLogoIcon />}
+                leftIcon={<IconBrandGithub />}
                 styles={{
                   leftIcon: {
                     marginRight: 15

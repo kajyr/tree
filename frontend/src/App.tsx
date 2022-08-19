@@ -10,7 +10,7 @@ import Page from 'templates/Page';
 import Dashboard from 'pages/dashboard';
 
 const App: FC = () => {
-  const { isLoading, data } = useQuery<Api.PersonsListResponse>('bootstrap', () =>
+  const { isLoading, data, refetch } = useQuery<Api.PersonsListResponse>('bootstrap', () =>
     fetch('/api/persons').then(res => res.json())
   );
 
@@ -21,7 +21,7 @@ const App: FC = () => {
   return (
     <>
       <Page>
-        <Dashboard data={data} />
+        <Dashboard data={data} update={refetch} />
       </Page>
     </>
   );

@@ -7,11 +7,11 @@ import { Button, Divider, Group, RingProgress, SimpleGrid, Text } from '@mantine
 import AddModal from './add-modal';
 import PersonCard from './person-card';
 
-const Dashboard: FC<{ data: Api.PersonsListResponse }> = ({ data }) => {
+const Dashboard: FC<{ data: Api.PersonsListResponse; update: () => void }> = ({ data, update }) => {
   return (
     <>
       <Group position="right">
-        <AddModal />
+        <AddModal onComplete={update} />
         <Button variant="outline">2</Button>
         <Button variant="outline">3</Button>
       </Group>
@@ -45,7 +45,7 @@ const Dashboard: FC<{ data: Api.PersonsListResponse }> = ({ data }) => {
       <Divider my="xs" label="Persons in the DB" />
       <SimpleGrid cols={3}>
         {data.persons.map(person => {
-          return <PersonCard key={person._id} data={person} />;
+          return <PersonCard key={person._id} data={person} onUpdate={update} />;
         })}
       </SimpleGrid>
       <Divider my="xs" label="Debug" />

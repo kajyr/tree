@@ -1,4 +1,4 @@
-import { Db } from 'mongodb';
+import { Db, ObjectId } from 'mongodb';
 
 const COLLECTION = 'persons';
 
@@ -20,7 +20,7 @@ export default function (fastify, opts, done) {
         const db = fastify.mongo.client.db('tree') as Db;
 
         const { name, surname } = req.body;
-        const p: any = { name, surname };
+        const p: any = { createdAt: Date.now(), name, surname, updatedAt: Date.now() };
 
         const c = db.collection(COLLECTION);
 
@@ -32,6 +32,31 @@ export default function (fastify, opts, done) {
         return {};
       },
       method: 'POST',
+      url: `/api/person`
+    },
+    {
+      handler: async function (req) {
+        const db = fastify.mongo.client.db('tree') as Db;
+
+        const { name, surname, _id } = req.body;
+
+        if (!ObjectId.isValid(_id)) {
+          throw new TypeError(`Invalid id: ${_id}`);
+        }
+
+        const update: any = { name, surname, updatedAt: Date.now() };
+
+        const c = db.collection(COLLECTION);
+
+        const r = await c.findOneAndUpdate({ _id: new ObjectId(_id) }, { $set: update });
+
+        if (r.value) {
+          return r.value;
+        }
+
+        throw { message: 'Unable to find the item you are looking for', statusCode: 404 };
+      },
+      method: 'PUT',
       url: `/api/person`
     }
   ];

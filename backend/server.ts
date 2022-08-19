@@ -12,16 +12,14 @@ const isDev = nodeEnv === 'development';
 
 const mongoHost = process.env.MONGO_HOST;
 
-const logger = false;
-
-/* pino({
+const logger = pino({
   transport: {
     options: {
       colorize: true
     },
     target: 'pino-pretty'
   }
-}); */
+});
 
 const init = async () => {
   const server = await app({
