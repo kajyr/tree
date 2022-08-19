@@ -2,6 +2,12 @@ import { Db, ObjectId } from 'mongodb';
 
 const COLLECTION = 'persons';
 
+function getPersonFromBrody(body: any) {
+  const { name, surname, gender } = body;
+
+  return { gender, name, surname };
+}
+
 export default function (fastify, opts, done) {
   const routes = [
     {
@@ -19,8 +25,7 @@ export default function (fastify, opts, done) {
       handler: async function (req) {
         const db = fastify.mongo.client.db('tree') as Db;
 
-        const { name, surname } = req.body;
-        const p: any = { createdAt: Date.now(), name, surname, updatedAt: Date.now() };
+        const p = { ...getPersonFromBrody(req.body), createdAt: Date.now(), updatedAt: Date.now() };
 
         const c = db.collection(COLLECTION);
 
@@ -38,13 +43,13 @@ export default function (fastify, opts, done) {
       handler: async function (req) {
         const db = fastify.mongo.client.db('tree') as Db;
 
-        const { name, surname, _id } = req.body;
+        const { _id } = req.body;
 
         if (!ObjectId.isValid(_id)) {
           throw new TypeError(`Invalid id: ${_id}`);
         }
 
-        const update: any = { name, surname, updatedAt: Date.now() };
+        const update = { ...getPersonFromBrody(req.body), updatedAt: Date.now() };
 
         const c = db.collection(COLLECTION);
 

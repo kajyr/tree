@@ -6,6 +6,7 @@ import { Button, Divider, Group, RingProgress, SimpleGrid, Text } from '@mantine
 
 import AddModal from './add-modal';
 import PersonCard from './person-card';
+import GenderDistr from './stats/gender-distr';
 
 const Dashboard: FC<{ data: Api.PersonsListResponse; update: () => void }> = ({ data, update }) => {
   return (
@@ -17,18 +18,7 @@ const Dashboard: FC<{ data: Api.PersonsListResponse; update: () => void }> = ({ 
       </Group>
       <Divider my="xs" label="Stats" />
       <SimpleGrid cols={3} spacing="sm">
-        <RingProgress
-          label={
-            <Text size="xs" align="center">
-              Sesso
-            </Text>
-          }
-          sections={[
-            { color: 'cyan', value: 40 },
-            { color: 'orange', value: 15 },
-            { color: 'grape', value: 15 }
-          ]}
-        />
+        <GenderDistr list={data.persons} />
         <RingProgress
           label={
             <Text size="xs" align="center">
@@ -48,10 +38,6 @@ const Dashboard: FC<{ data: Api.PersonsListResponse; update: () => void }> = ({ 
           return <PersonCard key={person._id} data={person} onUpdate={update} />;
         })}
       </SimpleGrid>
-      <Divider my="xs" label="Debug" />
-      <pre>
-        <code>{JSON.stringify(data, undefined, 2)}</code>
-      </pre>
     </>
   );
 };

@@ -17,6 +17,7 @@ const AddModal: FC<{ onComplete: () => void }> = ({ onComplete }) => {
 
     await callJsonApi('/api/person', { body: JSON.stringify(person), method: 'POST' });
     setLoading(false);
+    setOpened(false);
     onComplete();
   }
 
