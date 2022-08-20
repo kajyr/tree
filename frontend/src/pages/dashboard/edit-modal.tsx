@@ -8,7 +8,7 @@ import React from 'react';
 import { ActionIcon, LoadingOverlay, Modal } from '@mantine/core';
 import { IconPencil } from '@tabler/icons';
 
-import PersonForm from './form';
+import PersonForm from '../../molecules/person-form';
 
 const EditModal: FC<{ data: PersonFromMongo; onComplete: () => void }> = ({ data, onComplete }) => {
   const [opened, setOpened] = useState(false);

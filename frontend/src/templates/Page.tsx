@@ -1,6 +1,6 @@
 import React, { FC, ReactNode } from 'react';
 
-import { AppShell, Badge, Button, Divider, Group, Header, Navbar, Title } from '@mantine/core';
+import { AppShell, Badge, Button, Divider, Group, Header, Navbar, TextInput, Title } from '@mantine/core';
 import { IconBrandGithub } from '@tabler/icons';
 
 const Page: FC<{ children: ReactNode }> = ({ children }) => (
@@ -9,9 +9,11 @@ const Page: FC<{ children: ReactNode }> = ({ children }) => (
       padding="md"
       navbar={
         <Navbar width={{ base: 300 }} p="xs">
-          <Navbar.Section>nav header</Navbar.Section>
+          <Navbar.Section>
+            <TextInput placeholder="Search" label="Focus on" size="xs" />
+          </Navbar.Section>
           <Navbar.Section grow mt="md">
-            nav links
+            list of names
           </Navbar.Section>
           <Navbar.Section>
             <Group position="left">

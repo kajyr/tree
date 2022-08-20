@@ -4,8 +4,8 @@ import React, { FC } from 'react';
 
 import { Button, Divider, Group, RingProgress, SimpleGrid, Text } from '@mantine/core';
 
+import PersonCard from '../../organisms/card';
 import AddModal from './add-modal';
-import PersonCard from './person-card';
 import GenderDistr from './stats/gender-distr';
 
 const Dashboard: FC<{ data: Api.PersonsListResponse; update: () => void }> = ({ data, update }) => {

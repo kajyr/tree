@@ -8,12 +8,16 @@ function getPersonFromBrody(body: any) {
   return { gender, name, surname };
 }
 
+function getCollection(fastify: any) {
+  const db = fastify.mongo.client.db('tree') as Db;
+  return db.collection(COLLECTION);
+}
+
 export default function (fastify, opts, done) {
   const routes = [
     {
       handler: async function () {
-        const db = fastify.mongo.client.db('tree') as Db;
-        const c = db.collection(COLLECTION);
+        const c = getCollection(fastify);
         const persons = await c.find().toArray();
 
         return { persons };
@@ -23,11 +27,9 @@ export default function (fastify, opts, done) {
     },
     {
       handler: async function (req) {
-        const db = fastify.mongo.client.db('tree') as Db;
+        const c = getCollection(fastify);
 
         const p = { ...getPersonFromBrody(req.body), createdAt: Date.now(), updatedAt: Date.now() };
-
-        const c = db.collection(COLLECTION);
 
         const response = await c.insertOne(p);
 
@@ -41,8 +43,7 @@ export default function (fastify, opts, done) {
     },
     {
       handler: async function (req) {
-        const db = fastify.mongo.client.db('tree') as Db;
-
+        const c = getCollection(fastify);
         const { _id } = req.body;
 
         if (!ObjectId.isValid(_id)) {
@@ -50,8 +51,6 @@ export default function (fastify, opts, done) {
         }
 
         const update = { ...getPersonFromBrody(req.body), updatedAt: Date.now() };
-
-        const c = db.collection(COLLECTION);
 
         const r = await c.findOneAndUpdate({ _id: new ObjectId(_id) }, { $set: update });
 
@@ -62,6 +61,20 @@ export default function (fastify, opts, done) {
         throw { message: 'Unable to find the item you are looking for', statusCode: 404 };
       },
       method: 'PUT',
+      url: `/api/person`
+    },
+    {
+      handler: async function (req) {
+        const c = getCollection(fastify);
+        const { _id } = req.body;
+
+        if (!ObjectId.isValid(_id)) {
+          throw new TypeError(`Invalid id: ${_id}`);
+        }
+
+        await c.deleteOne({ _id: new ObjectId(_id) });
+      },
+      method: 'DELETE',
       url: `/api/person`
     }
   ];

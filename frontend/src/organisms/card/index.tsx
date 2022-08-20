@@ -5,7 +5,8 @@ import React, { FC } from 'react';
 
 import { Button, Card, Group, Image, Text } from '@mantine/core';
 
-import EditModal from './edit-modal';
+import DeleteModal from '../../pages/dashboard/delete-modal';
+import EditModal from '../../pages/dashboard/edit-modal';
 import placeholderFemale from './placeholder-female.png';
 import placeholderMale from './placeholder-male.png';
 
@@ -23,7 +24,10 @@ const PersonCard: FC<{ data: PersonFromMongo; onUpdate: () => void }> = ({ data,
 
       <Group mt="md" mb="xs" position="apart">
         <Text weight={500}>{name(data)}</Text>
-        <EditModal data={data} onComplete={onUpdate} />
+        <Group>
+          <EditModal data={data} onComplete={onUpdate} />
+          <DeleteModal data={data} onComplete={onUpdate} />
+        </Group>
       </Group>
 
       <Text size="sm" color="dimmed">

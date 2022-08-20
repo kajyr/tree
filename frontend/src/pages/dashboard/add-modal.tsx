@@ -4,9 +4,10 @@ import { Person } from 'types';
 import { FC, useState } from 'react';
 import React from 'react';
 
-import { Button, LoadingOverlay, Modal } from '@mantine/core';
+import PersonForm from 'molecules/person-form';
 
-import PersonForm from './form';
+import { ActionIcon, LoadingOverlay, Modal } from '@mantine/core';
+import { IconUserPlus } from '@tabler/icons';
 
 const AddModal: FC<{ onComplete: () => void }> = ({ onComplete }) => {
   const [opened, setOpened] = useState(false);
@@ -38,9 +39,9 @@ const AddModal: FC<{ onComplete: () => void }> = ({ onComplete }) => {
         </div>
       </Modal>
 
-      <Button onClick={() => setOpened(true)} variant="outline">
-        Add a new person
-      </Button>
+      <ActionIcon color="blue" size="sm" onClick={() => setOpened(true)}>
+        <IconUserPlus />
+      </ActionIcon>
     </>
   );
 };
