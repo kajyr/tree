@@ -1,4 +1,4 @@
-import { callApi, callJsonApi } from 'helpers/api';
+import { callApi } from 'helpers/api';
 import { name } from 'helpers/person';
 import { Person, PersonFromMongo } from 'types';
 

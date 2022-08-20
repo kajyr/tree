@@ -2,7 +2,7 @@ import { Api } from 'types';
 
 import React, { FC } from 'react';
 
-import { Button, Divider, Group, RingProgress, SimpleGrid, Text } from '@mantine/core';
+import { Divider, Group, RingProgress, SimpleGrid, Text } from '@mantine/core';
 
 import PersonCard from '../../organisms/card';
 import AddModal from './add-modal';
@@ -13,8 +13,6 @@ const Dashboard: FC<{ data: Api.PersonsListResponse; update: () => void }> = ({ 
     <>
       <Group position="right">
         <AddModal onComplete={update} />
-        <Button variant="outline">2</Button>
-        <Button variant="outline">3</Button>
       </Group>
       <Divider my="xs" label="Stats" />
       <SimpleGrid cols={3} spacing="sm">

@@ -1,3 +1,7 @@
+import { Api } from 'types';
+
+import { useQuery } from 'react-query';
+
 export async function callApi(url: string, options: RequestInit = {}) {
   const fetchOptions: RequestInit = {
     credentials: 'same-origin',
@@ -17,10 +21,13 @@ export async function callApi(url: string, options: RequestInit = {}) {
   return response;
 }
 
-export function callJsonApi<T>(url, options): Promise<T | undefined> {
+export function callJsonApi<T>(url, options?): Promise<T | undefined> {
   return callApi(url, options).then(response => {
     if (response.ok) {
       return response.json() as Promise<T>;
     }
   });
 }
+
+export const usePersons = () =>
+  useQuery<Api.PersonsListResponse>('bootstrap', () => callApi('/api/persons').then(res => res.json()));

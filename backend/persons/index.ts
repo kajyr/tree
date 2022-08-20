@@ -1,16 +1,17 @@
 import { Db, ObjectId } from 'mongodb';
+import { FullPerson, Person } from 'types';
 
 const COLLECTION = 'persons';
 
 function getPersonFromBrody(body: any) {
-  const { name, surname, gender } = body;
+  const { name, surname, gender, father, mother } = body;
 
-  return { gender, name, surname };
+  return { father: father && new ObjectId(father), gender, mother: mother && new ObjectId(mother), name, surname };
 }
 
 function getCollection(fastify: any) {
   const db = fastify.mongo.client.db('tree') as Db;
-  return db.collection(COLLECTION);
+  return db.collection<Person>(COLLECTION);
 }
 
 export default function (fastify, opts, done) {
@@ -76,6 +77,37 @@ export default function (fastify, opts, done) {
       },
       method: 'DELETE',
       url: `/api/person`
+    },
+    {
+      handler: async function (req) {
+        const c = getCollection(fastify);
+        const { id } = req.params;
+
+        if (!ObjectId.isValid(id)) {
+          throw new TypeError(`Invalid id: ${id}`);
+        }
+
+        const person = await c.findOne({ _id: new ObjectId(id) });
+
+        if (!person) {
+          throw { message: 'Id not found' };
+        }
+
+        const { father, mother, ...p } = person;
+        const full: FullPerson = p;
+
+        if (father) {
+          full.father = await c.findOne({ _id: new ObjectId(father) });
+        }
+
+        if (mother) {
+          full.mother = await c.findOne({ _id: new ObjectId(mother) });
+        }
+
+        return full;
+      },
+      method: 'GET',
+      url: `/api/person/:id`
     }
   ];
 

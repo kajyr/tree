@@ -1,3 +1,4 @@
+import { usePersons } from 'helpers/api';
 import { Api } from 'types';
 
 import React, { FC } from 'react';
@@ -10,9 +11,7 @@ import Page from 'templates/Page';
 import Dashboard from 'pages/dashboard';
 
 const App: FC = () => {
-  const { isLoading, data, refetch } = useQuery<Api.PersonsListResponse>('bootstrap', () =>
-    fetch('/api/persons').then(res => res.json())
-  );
+  const { isLoading, data, refetch } = usePersons();
 
   if (isLoading || !data) {
     return <Loader />;

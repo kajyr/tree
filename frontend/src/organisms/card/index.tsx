@@ -3,9 +3,10 @@ import { PersonFromMongo } from 'types';
 
 import React, { FC } from 'react';
 
-import { Button, Card, Group, Image, Text } from '@mantine/core';
+import DetailsModal from 'organisms/details/modal';
 
-import DeleteModal from '../../pages/dashboard/delete-modal';
+import { Card, Group, Image, Text } from '@mantine/core';
+
 import EditModal from '../../pages/dashboard/edit-modal';
 import placeholderFemale from './placeholder-female.png';
 import placeholderMale from './placeholder-male.png';
@@ -24,20 +25,14 @@ const PersonCard: FC<{ data: PersonFromMongo; onUpdate: () => void }> = ({ data,
 
       <Group mt="md" mb="xs" position="apart">
         <Text weight={500}>{name(data)}</Text>
-        <Group>
-          <EditModal data={data} onComplete={onUpdate} />
-          <DeleteModal data={data} onComplete={onUpdate} />
-        </Group>
+        <EditModal data={data} onComplete={onUpdate} />
       </Group>
 
       <Text size="sm" color="dimmed">
-        With Fjord Tours you can explore more of the magical fjord landscapes with tours and activities on and around
-        the fjords of Norway
+        Nato a .. il .. <br />
       </Text>
 
-      <Button variant="light" color="blue" fullWidth mt="md" radius="md">
-        Book classic tour now
-      </Button>
+      <DetailsModal id={data._id} onUpdate={onUpdate} />
     </Card>
   );
 };
