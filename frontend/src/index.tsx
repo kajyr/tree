@@ -3,9 +3,11 @@ import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
+import Dashboard from 'pages/dashboard';
+import Details from 'pages/details';
+
 import { NotificationsProvider } from '@mantine/notifications';
 
-import App from './App';
 import FourOhFour from './pages/four-oh-four';
 
 const queryClient = new QueryClient({
@@ -26,7 +28,8 @@ if (container) {
           <BrowserRouter>
             <Routes>
               <Route path="*" element={<FourOhFour />} />
-              <Route path="/" element={<App />} />
+              <Route index element={<Dashboard />} />
+              <Route path="/p/:id" element={<Details />} />
             </Routes>
           </BrowserRouter>
         </QueryClientProvider>

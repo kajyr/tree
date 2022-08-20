@@ -2,10 +2,9 @@ import { name } from 'helpers/person';
 import { PersonFromMongo } from 'types';
 
 import React, { FC } from 'react';
+import { Link } from 'react-router-dom';
 
-import DetailsModal from 'organisms/details/modal';
-
-import { Card, Group, Image, Text } from '@mantine/core';
+import { Button, Card, Group, Image, Text } from '@mantine/core';
 
 import EditModal from '../../pages/dashboard/edit-modal';
 import placeholderFemale from './placeholder-female.png';
@@ -32,7 +31,9 @@ const PersonCard: FC<{ data: PersonFromMongo; onUpdate: () => void }> = ({ data,
         Nato a .. il .. <br />
       </Text>
 
-      <DetailsModal id={data._id} onUpdate={onUpdate} />
+      <Button variant="subtle" color="blue" fullWidth mt="md" component={Link} to={`/p/${data._id}`}>
+        More
+      </Button>
     </Card>
   );
 };

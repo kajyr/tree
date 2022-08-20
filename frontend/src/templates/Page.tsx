@@ -1,42 +1,12 @@
-import React, { FC, ReactNode } from 'react';
+import React, { FC, ReactElement, ReactNode } from 'react';
 
-import { AppShell, Badge, Button, Divider, Group, Header, Navbar, TextInput, Title } from '@mantine/core';
-import { IconBrandGithub } from '@tabler/icons';
+import { AppShell, Header, Title } from '@mantine/core';
 
-const Page: FC<{ children: ReactNode }> = ({ children }) => (
+const Page: FC<{ children: ReactNode; navbar: ReactElement }> = ({ children, navbar }) => (
   <>
     <AppShell
       padding="md"
-      navbar={
-        <Navbar width={{ base: 300 }} p="xs">
-          <Navbar.Section>
-            <TextInput placeholder="Search" label="Focus on" size="xs" />
-          </Navbar.Section>
-          <Navbar.Section grow mt="md">
-            list of names
-          </Navbar.Section>
-          <Navbar.Section>
-            <Group position="left">
-              <Badge>v{__VERSION__}</Badge>
-              <Divider orientation="vertical" mx="sm" />
-              <Button
-                component="a"
-                href="https://github.com/kajyr/tree"
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="outline"
-                leftIcon={<IconBrandGithub />}
-                styles={{
-                  leftIcon: {
-                    marginRight: 15
-                  }
-                }}>
-                Source Code
-              </Button>
-            </Group>
-          </Navbar.Section>
-        </Navbar>
-      }
+      navbar={navbar}
       header={
         <Header height={60} p="xs">
           <Title order={1}>Tree</Title>
