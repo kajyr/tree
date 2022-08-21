@@ -19,6 +19,7 @@
     "buffer": "^6.0.3",
     "dayjs": "^1.11.3",
     "html-webpack-plugin": "^5.5.0",
+    "merge-anything": "^5.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.2",

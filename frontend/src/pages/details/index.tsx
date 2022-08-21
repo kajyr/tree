@@ -1,4 +1,4 @@
-import { callApi, usePersons } from 'helpers/api';
+import { callApi } from 'helpers/api';
 import { Api } from 'types';
 
 import React, { FC } from 'react';

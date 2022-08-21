@@ -3,10 +3,19 @@ import { FullPerson, Person } from 'types';
 
 const COLLECTION = 'persons';
 
-function getPersonFromBrody(body: any) {
-  const { name, surname, gender, father, mother } = body;
+function getPersonFromBrody(body: Person): Person {
+  const { name, surname, gender, father, mother, birth, death, deceased } = body;
 
-  return { father: father && new ObjectId(father), gender, mother: mother && new ObjectId(mother), name, surname };
+  return {
+    birth,
+    death,
+    deceased,
+    father: father && new ObjectId(father),
+    gender,
+    mother: mother && new ObjectId(mother),
+    name,
+    surname
+  };
 }
 
 function getCollection(fastify: any) {

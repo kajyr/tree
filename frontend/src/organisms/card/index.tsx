@@ -1,8 +1,11 @@
+import { date } from 'helpers/dates';
 import { name } from 'helpers/person';
 import { PersonFromMongo } from 'types';
 
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
+
+import LifeDates from 'atoms/life-dates';
 
 import { Button, Card, Group, Image, Text } from '@mantine/core';
 
@@ -27,9 +30,7 @@ const PersonCard: FC<{ data: PersonFromMongo; onUpdate: () => void }> = ({ data,
         <EditModal data={data} onComplete={onUpdate} />
       </Group>
 
-      <Text size="sm" color="dimmed">
-        Nato a .. il .. <br />
-      </Text>
+      <LifeDates person={data} />
 
       <Button variant="subtle" color="blue" fullWidth mt="md" component={Link} to={`/p/${data._id}`}>
         More

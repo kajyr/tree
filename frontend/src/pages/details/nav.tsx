@@ -1,7 +1,10 @@
+import { date } from 'helpers/dates';
 import { fp2p, name } from 'helpers/person';
-import { FullPerson } from 'types';
+import { BasePerson, FullPerson } from 'types';
 
 import React, { FC } from 'react';
+
+import LifeDates from 'atoms/life-dates';
 
 import DeleteModal from 'organisms/modal-delete';
 
@@ -30,6 +33,7 @@ const Nav: FC<{ data: FullPerson; onUpdate: () => void }> = ({ data, onUpdate })
       </Group>
     </Navbar.Section>
     <Navbar.Section grow mt="md">
+      <LifeDates person={data} />
       {data.father && <Text size="sm">Father: {name(data.father)}</Text>}
       {data.mother && <Text size="sm">Mother: {name(data.mother)}</Text>}
     </Navbar.Section>

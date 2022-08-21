@@ -1,3 +1,5 @@
+import { ObjectId } from 'mongodb';
+
 export namespace Server {
   export type Route = {
     method: 'GET';
@@ -22,12 +24,21 @@ export namespace Server {
   export type FastifyRoutesMap = Record<string, RouteBlock>;
 }
 
-type id = string;
+type id = ObjectId;
+
+interface LifeEvent {
+  date?: string;
+  place?: string;
+}
 
 export interface BasePerson {
+  dateOfBirth?: string;
+  gender?: 'male' | 'female' | null;
   name?: string;
   surname?: string;
-  gender?: 'male' | 'female' | null;
+  birth?: LifeEvent;
+  death?: LifeEvent;
+  deceased?: boolean;
 }
 export interface Person extends BasePerson {
   father?: id;

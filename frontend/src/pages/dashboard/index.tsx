@@ -11,6 +11,7 @@ import { Divider, Group, RingProgress, SimpleGrid, Text } from '@mantine/core';
 import PersonCard from '../../organisms/card';
 import AddModal from './add-modal';
 import Nav from './nav';
+import Alive from './stats/alive';
 import GenderDistr from './stats/gender-distr';
 
 const Dashboard: FC = () => {
@@ -21,25 +22,14 @@ const Dashboard: FC = () => {
   }
 
   return (
-    <Page navbar={<Nav />}>
+    <Page navbar={<Nav list={data.persons} />}>
       <Group position="right">
         <AddModal onComplete={refetch} />
       </Group>
       <Divider my="xs" label="Stats" />
       <SimpleGrid cols={3} spacing="sm">
         <GenderDistr list={data.persons} />
-        <RingProgress
-          label={
-            <Text size="xs" align="center">
-              Vivi/Deceduti
-            </Text>
-          }
-          sections={[
-            { color: 'cyan', value: 40 },
-            { color: 'orange', value: 15 },
-            { color: 'grape', value: 15 }
-          ]}
-        />
+        <Alive list={data.persons} />
       </SimpleGrid>
       <Divider my="xs" label="Persons in the DB" />
       <SimpleGrid cols={3}>

@@ -1,9 +1,16 @@
 type id = string;
 
+interface LifeEvent {
+  date?: string | Date;
+  place?: string;
+}
 export interface BasePerson {
   name?: string;
   surname?: string;
   gender?: 'male' | 'female' | null;
+  birth?: LifeEvent;
+  death?: LifeEvent;
+  deceased?: boolean;
 }
 
 interface MongoObj {
