@@ -1,8 +1,5 @@
+import { CytoscapeJSON, CytoscapeNode } from 'common';
 import { BasePerson, Person } from 'types';
-
-type CytoscapeNode = { group: 'nodes'; data: { id: string; label: string } };
-type CytoscapeEdge = { group: 'edges'; data: { source: string; target: string } };
-export type CytoscapeJSON = (CytoscapeNode | CytoscapeEdge)[];
 
 // from frontend/helpers
 function name(p: BasePerson) {

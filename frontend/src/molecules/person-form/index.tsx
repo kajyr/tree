@@ -36,6 +36,7 @@ const PersonForm: FC<{ data: Person | PersonFromMongo; onChange: (p: Person) => 
         birth: { date: '', place: '' },
         death: { date: '', place: '' },
         deceased: false,
+        events: [],
         father: null,
         gender: null,
         mother: null,

@@ -17,6 +17,7 @@
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
     "buffer": "^6.0.3",
+    "common": "^1.0.0",
     "dayjs": "^1.11.3",
     "html-webpack-plugin": "^5.5.0",
     "merge-anything": "^5.0.2",

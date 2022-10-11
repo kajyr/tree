@@ -24,8 +24,8 @@ coverage
 .lock-wscript
 
 # Compiled binaries
-build/Release
-build-backend
+public
+build
 
 # Dependency directories
 node_modules
@@ -46,9 +46,6 @@ migrations/.migrate
 
 # Maps
 *.map
-
-# Public
-public
 
 # Stats
 stats.json

@@ -1,3 +1,5 @@
+import { CytoscapeJSON } from 'common';
+
 type id = string;
 
 interface LifeEvent {
@@ -23,10 +25,6 @@ export interface Person extends BasePerson {
 }
 
 export interface PersonFromMongo extends Person, MongoObj {}
-
-export type CytoscapeNode = { group: 'nodes'; data: { id: string; label: string } };
-export type CytoscapeEdge = { group: 'edges'; data: { source: string; target: string } };
-export type CytoscapeJSON = (CytoscapeNode | CytoscapeEdge)[];
 
 export namespace Api {
   export type PersonsListResponse = { persons: PersonFromMongo[] };

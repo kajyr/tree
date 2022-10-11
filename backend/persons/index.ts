@@ -1,7 +1,9 @@
+import { CytoscapeJSON } from 'common';
+import { Events } from 'common';
 import { Collection, Db, ObjectId } from 'mongodb';
-import { Events, Person } from 'types';
+import { Person } from 'types';
 
-import getCytoscapeJson, { CytoscapeJSON } from './cytoscape';
+import getCytoscapeJson from './cytoscape';
 import { mkDeathEvent } from './events';
 
 const COLLECTION = 'persons';

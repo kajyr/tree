@@ -1,5 +1,5 @@
-import { callApi, callJsonApi } from 'helpers/api';
-import { CytoscapeJSON, CytoscapeNode } from 'types';
+import { CytoscapeJSON } from 'common';
+import { callJsonApi } from 'helpers/api';
 
 import React, { FC, useEffect, useRef } from 'react';
 import CytoscapeComponent from 'react-cytoscapejs';
@@ -13,7 +13,6 @@ async function expandNodes(cy: Cytoscape, nodeId: string) {
 
 const Cytoscape: FC<{ data: CytoscapeJSON }> = ({ data }) => {
   const myCyRef = useRef();
-  //const root = data.length > 0 ? (data.filter(d => d.group === 'nodes').pop() as CytoscapeNode) : null;
 
   const layoutOptions = {
     directed: true,
