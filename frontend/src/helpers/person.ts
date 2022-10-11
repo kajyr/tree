@@ -1,4 +1,4 @@
-import { BasePerson, FullPerson, PersonFromMongo } from 'types';
+import { BasePerson } from 'types';
 
 export function name(p: BasePerson) {
   const a = [p.name || 'Unknown'];
@@ -33,18 +33,4 @@ export function g2c(gender: string | null | undefined) {
   }
 
   return 'gray';
-}
-
-/**
- * Converts a FullPerson in a light person obj.
- * To help the modals
- */
-export function fp2p(p: FullPerson): PersonFromMongo {
-  const { father, mother, ...other } = p;
-
-  return {
-    ...other,
-    father: father ? father._id : null,
-    mother: mother ? mother._id : null
-  };
 }

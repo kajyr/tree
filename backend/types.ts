@@ -32,6 +32,7 @@ interface LifeEvent {
 }
 
 export interface BasePerson {
+  _id?: id;
   dateOfBirth?: string;
   gender?: 'male' | 'female' | null;
   name?: string;
@@ -43,9 +44,4 @@ export interface BasePerson {
 export interface Person extends BasePerson {
   father?: id;
   mother?: id;
-}
-
-export interface FullPerson extends BasePerson {
-  father?: Person | null;
-  mother?: Person | null;
 }

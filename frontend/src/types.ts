@@ -24,12 +24,17 @@ export interface Person extends BasePerson {
 
 export interface PersonFromMongo extends Person, MongoObj {}
 
-export interface FullPerson extends BasePerson, MongoObj {
-  father?: PersonFromMongo;
-  mother?: PersonFromMongo;
-}
+export type CytoscapeNode = { group: 'nodes'; data: { id: string; label: string } };
+export type CytoscapeEdge = { group: 'edges'; data: { source: string; target: string } };
+export type CytoscapeJSON = (CytoscapeNode | CytoscapeEdge)[];
 
 export namespace Api {
   export type PersonsListResponse = { persons: PersonFromMongo[] };
-  export type DetailsResponse = FullPerson;
+  // TODO wire this to the shared types
+  export type DetailsResponse = {
+    person: PersonFromMongo;
+    cytoscape: CytoscapeJSON;
+    father?: PersonFromMongo;
+    mother?: PersonFromMongo;
+  };
 }

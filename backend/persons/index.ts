@@ -1,5 +1,7 @@
-import { Db, ObjectId } from 'mongodb';
-import { FullPerson, Person } from 'types';
+import { Collection, Db, ObjectId } from 'mongodb';
+import { BasePerson, Person } from 'types';
+
+import getCytoscapeJson, { CytoscapeJSON } from './cytoscape';
 
 const COLLECTION = 'persons';
 
@@ -21,6 +23,18 @@ function getPersonFromBrody(body: Person): Person {
 function getCollection(fastify: any) {
   const db = fastify.mongo.client.db('tree') as Db;
   return db.collection<Person>(COLLECTION);
+}
+
+function getChildren(c: Collection<Person>, id: ObjectId) {
+  return c.find({ $or: [{ father: id }, { mother: id }] }).toArray();
+}
+
+export interface DetailsApiResponse {
+  person: Person;
+  father?: Person | null;
+  mother?: Person | null;
+  children: Person[];
+  cytoscape?: CytoscapeJSON;
 }
 
 export default function (fastify, opts, done) {
@@ -88,7 +102,7 @@ export default function (fastify, opts, done) {
       url: `/api/person`
     },
     {
-      handler: async function (req) {
+      handler: async function (req): Promise<DetailsApiResponse> {
         const c = getCollection(fastify);
         const { id } = req.params;
 
@@ -103,20 +117,50 @@ export default function (fastify, opts, done) {
         }
 
         const { father, mother, ...p } = person;
-        const full: FullPerson = p;
+
+        const children = await getChildren(c, new ObjectId(id));
+        const response: DetailsApiResponse = { children, person: p };
 
         if (father) {
-          full.father = await c.findOne({ _id: new ObjectId(father) });
+          response.father = await c.findOne({ _id: new ObjectId(father) });
         }
 
         if (mother) {
-          full.mother = await c.findOne({ _id: new ObjectId(mother) });
+          response.mother = await c.findOne({ _id: new ObjectId(mother) });
         }
 
-        return full;
+        response.cytoscape = getCytoscapeJson(response.person, response.father, response.mother, children);
+
+        return response;
       },
       method: 'GET',
       url: `/api/person/:id`
+    },
+    {
+      handler: async function (req): Promise<CytoscapeJSON> {
+        const c = getCollection(fastify);
+        const { id } = req.params;
+
+        if (!ObjectId.isValid(id)) {
+          throw new TypeError(`Invalid id: ${id}`);
+        }
+
+        const person = await c.findOne({ _id: new ObjectId(id) });
+
+        if (!person) {
+          throw { message: 'Id not found' };
+        }
+
+        const { father: fatherId, mother: motherId } = person;
+
+        const children = await getChildren(c, new ObjectId(id));
+        const father = fatherId ? await c.findOne({ _id: new ObjectId(fatherId) }) : null;
+        const mother = motherId ? await c.findOne({ _id: new ObjectId(motherId) }) : null;
+
+        return getCytoscapeJson(person, father, mother, children);
+      },
+      method: 'GET',
+      url: `/api/person/:id/cytoscape-links`
     }
   ];
 

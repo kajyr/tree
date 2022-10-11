@@ -9,6 +9,7 @@ import Loader from 'atoms/Loader';
 
 import Page from 'templates/Page';
 
+import Cytoscape from './cytoscape';
 import Nav from './nav';
 
 const Details: FC = () => {
@@ -21,7 +22,11 @@ const Details: FC = () => {
     return <Loader />;
   }
 
-  return <Page navbar={<Nav data={data} onUpdate={refetch} />}>dataaa</Page>;
+  return (
+    <Page navbar={<Nav data={data} onUpdate={refetch} />}>
+      <Cytoscape data={data.cytoscape} />
+    </Page>
+  );
 };
 
 export default Details;
