@@ -11,38 +11,43 @@ async function build(opts: Options) {
   app.register(require('fastify-log'));
   app.register(require('fastify-routes-table'));
 
-  await app.register(require('@fastify/mongodb'), {
-    // force to close the mongodb connection when app stopped
-    // the default value is false
-    forceClose: true,
-    url: opts.mongoUrl
-  });
+  try {
+    await app.register(require('@fastify/mongodb'), {
+      // force to close the mongodb connection when app stopped
+      // the default value is false
+      forceClose: true,
+      url: opts.mongoUrl
+    });
 
-  //await app.register(require('./bootstrap'));
-  await app.register(require('./persons'));
+    //await app.register(require('./bootstrap'));
+    await app.register(require('./persons'));
 
-  // Block other api
-  app.route({
-    handler: (req, reply) => {
-      reply.code(404).send();
-    },
-    method: ['DELETE', 'GET', 'HEAD', 'PATCH', 'POST', 'PUT', 'OPTIONS'],
-    url: '/api/*'
-  });
+    // Block other api
+    app.route({
+      handler: (req, reply) => {
+        reply.code(404).send();
+      },
+      method: ['DELETE', 'GET', 'HEAD', 'PATCH', 'POST', 'PUT', 'OPTIONS'],
+      url: '/api/*'
+    });
 
-  app.register(require('@fastify/static'), {
-    root: PUBLIC_PATH
-  });
+    app.register(require('@fastify/static'), {
+      root: PUBLIC_PATH
+    });
 
-  app.setNotFoundHandler((_, reply) => {
-    //@ts-ignore This is added by a fastify plugin
-    reply.sendFile('index.html');
-  });
+    app.setNotFoundHandler((_, reply) => {
+      //@ts-ignore This is added by a fastify plugin
+      reply.sendFile('index.html');
+    });
 
-  app.get('/', (_, reply) => {
-    //@ts-ignore This is added by a fastify plugin
-    reply.sendFile('index.html');
-  });
+    app.get('/', (_, reply) => {
+      //@ts-ignore This is added by a fastify plugin
+      reply.sendFile('index.html');
+    });
+  } catch (e: any) {
+    console.log('---', e.message);
+    process.exit();
+  }
 
   return app;
 }
