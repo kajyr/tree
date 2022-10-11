@@ -1,17 +1,24 @@
 import { Collection, Db, ObjectId } from 'mongodb';
-import { BasePerson, Person } from 'types';
+import { Events, Person } from 'types';
 
 import getCytoscapeJson, { CytoscapeJSON } from './cytoscape';
+import { mkDeathEvent } from './events';
 
 const COLLECTION = 'persons';
 
 function getPersonFromBrody(body: Person): Person {
   const { name, surname, gender, father, mother, birth, death, deceased } = body;
+  const events = [] as Events[];
+
+  if (deceased && death) {
+    events.push(mkDeathEvent(death));
+  }
 
   return {
     birth,
     death,
     deceased,
+    events,
     father: father && new ObjectId(father),
     gender,
     mother: mother && new ObjectId(mother),

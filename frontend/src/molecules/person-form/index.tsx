@@ -5,9 +5,10 @@ import React, { FC } from 'react';
 
 import SelectPerson from 'atoms/select-person';
 
-import { Button, Checkbox, Group, Radio, TextInput } from '@mantine/core';
+import { ActionIcon, Button, Checkbox, Group, Menu, Radio, Space, TextInput, Title } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
+import { IconBabyCarriage, IconCertificate, IconConfetti, IconSquarePlus } from '@tabler/icons';
 
 import { Person, PersonFromMongo } from '../../types';
 
@@ -85,6 +86,28 @@ const PersonForm: FC<{ data: Person | PersonFromMongo; onChange: (p: Person) => 
         filter={p => p.gender !== 'male'}
         {...form.getInputProps('mother')}
       />
+      <Space h="md" />
+      <Group position="apart">
+        <Title order={3}>Events</Title>
+        <Menu shadow="md" width={200}>
+          <Menu.Target>
+            <ActionIcon
+              color="blue"
+              size="sm"
+              onClick={() => {
+                console.log('add');
+              }}>
+              <IconSquarePlus />
+            </ActionIcon>
+          </Menu.Target>
+          <Menu.Dropdown>
+            <Menu.Label>Add a life event</Menu.Label>
+            <Menu.Item icon={<IconBabyCarriage size={14} />}>Child</Menu.Item>
+            <Menu.Item icon={<IconConfetti size={14} />}>Wedding</Menu.Item>
+            <Menu.Item icon={<IconCertificate size={14} />}>Death</Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
+      </Group>
       <Group position="right" mt="md">
         <Button
           type="submit"

@@ -26,11 +26,26 @@ export namespace Server {
 
 type id = ObjectId;
 
-interface LifeEvent {
+export interface LifeEvent {
   date?: string;
   place?: string;
 }
 
+export interface WeddingEvent extends LifeEvent {
+  type: 'wedding';
+  partner?: id;
+}
+
+export interface DeathEvent extends LifeEvent {
+  type: 'death';
+}
+
+export interface ChildEvent extends LifeEvent {
+  type: 'child';
+  child?: id;
+}
+
+export type Events = WeddingEvent | DeathEvent | ChildEvent;
 export interface BasePerson {
   _id?: id;
   dateOfBirth?: string;
@@ -39,7 +54,8 @@ export interface BasePerson {
   surname?: string;
   birth?: LifeEvent;
   death?: LifeEvent;
-  deceased?: boolean;
+  deceased?: boolean; // move to a fn that checks if event: death
+  events: Events[];
 }
 export interface Person extends BasePerson {
   father?: id;
