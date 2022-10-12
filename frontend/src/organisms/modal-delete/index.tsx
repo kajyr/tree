@@ -1,9 +1,8 @@
+import { name } from 'common';
 import { callApi } from 'helpers/api';
-import { name } from 'helpers/person';
 import { Person, PersonFromMongo } from 'types';
 
-import { FC, useState } from 'react';
-import React from 'react';
+import React, { FC, useState } from 'react';
 
 import { ActionIcon, Button, Group, LoadingOverlay, Modal, Text } from '@mantine/core';
 import { IconTrash } from '@tabler/icons';

@@ -1,5 +1,4 @@
-import { date } from 'helpers/dates';
-import { name } from 'helpers/person';
+import { name } from 'common';
 import { PersonFromMongo } from 'types';
 
 import React, { FC } from 'react';

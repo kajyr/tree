@@ -1,4 +1,4 @@
-import { name } from 'helpers/person';
+import { name } from 'common';
 import { PersonFromMongo } from 'types';
 
 import React, { FC, useState } from 'react';

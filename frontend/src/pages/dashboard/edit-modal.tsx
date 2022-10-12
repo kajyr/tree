@@ -1,6 +1,6 @@
+import { name } from 'common';
 import { callJsonApi } from 'helpers/api';
-import { name } from 'helpers/person';
-import { Person, PersonFromMongo } from 'types';
+import { Person, PersonWithoutId } from 'types';
 
 import { FC, useState } from 'react';
 import React from 'react';
@@ -10,13 +10,12 @@ import { IconPencil } from '@tabler/icons';
 
 import PersonForm from '../../molecules/person-form';
 
-const EditModal: FC<{ data: PersonFromMongo; onComplete: () => void }> = ({ data, onComplete }) => {
+const EditModal: FC<{ data: Person; onComplete: () => void }> = ({ data, onComplete }) => {
   const [opened, setOpened] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  async function submit(person: Person) {
+  async function submit(person: PersonWithoutId) {
     setLoading(true);
-    console.log(person);
 
     await callJsonApi('/api/person', { body: JSON.stringify(person), method: 'PUT' });
     setLoading(false);

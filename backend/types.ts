@@ -1,4 +1,4 @@
-import { Events, LifeEvent } from 'common';
+import { BasePerson as CommonBase } from 'common';
 import { ObjectId } from 'mongodb';
 
 export namespace Server {
@@ -27,16 +27,8 @@ export namespace Server {
 
 type id = ObjectId;
 
-export interface BasePerson {
+export interface BasePerson extends CommonBase {
   _id?: id;
-  dateOfBirth?: string;
-  gender?: 'male' | 'female' | null;
-  name?: string;
-  surname?: string;
-  birth?: LifeEvent;
-  death?: LifeEvent;
-  deceased?: boolean; // move to a fn that checks if event: death
-  events: Events[];
 }
 export interface Person extends BasePerson {
   father?: id;

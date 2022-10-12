@@ -1,4 +1,4 @@
-import { name } from 'helpers/person';
+import { name } from 'common';
 import { PersonFromMongo } from 'types';
 
 import React, { FC } from 'react';
@@ -21,7 +21,7 @@ const SelectPerson: FC<{
     <Select
       label={label}
       placeholder="Select a person"
-      data={availables.map(p => ({ label: name(p), value: p._id }))}
+      data={availables.map(p => ({ label: name(p), value: p._id as string }))}
       {...other}
     />
   );

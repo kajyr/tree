@@ -1,5 +1,4 @@
-import { CytoscapeJSON } from 'common';
-import { Events } from 'common';
+import { CytoscapeJSON, LifeEvent, deceased } from 'common';
 import { Collection, Db, ObjectId } from 'mongodb';
 import { Person } from 'types';
 
@@ -8,18 +7,18 @@ import { mkDeathEvent } from './events';
 
 const COLLECTION = 'persons';
 
-function getPersonFromBrody(body: Person): Person {
-  const { name, surname, gender, father, mother, birth, death, deceased } = body;
-  const events = [] as Events[];
+function getPersonFromBrody(body: Person & { death: LifeEvent }): Person {
+  const { name, surname, gender, father, mother, birth, death, events = [] } = body;
 
-  if (deceased && death) {
+  const deathEvent = deceased(body);
+
+  // TODO write test for this
+  if (!deathEvent && death) {
     events.push(mkDeathEvent(death));
   }
 
   return {
     birth,
-    death,
-    deceased,
     events,
     father: father && new ObjectId(father),
     gender,

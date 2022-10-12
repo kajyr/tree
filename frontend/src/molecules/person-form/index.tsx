@@ -1,3 +1,4 @@
+import { Events, deceased } from 'common';
 import { usePersons } from 'helpers/api';
 import { merge } from 'merge-anything';
 
@@ -5,37 +6,37 @@ import React, { FC } from 'react';
 
 import SelectPerson from 'atoms/select-person';
 
-import { ActionIcon, Button, Checkbox, Group, Menu, Radio, Space, TextInput, Title } from '@mantine/core';
+import { ActionIcon, Button, Group, Menu, Radio, Space, TextInput, Title } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { IconBabyCarriage, IconCertificate, IconConfetti, IconSquarePlus } from '@tabler/icons';
 
-import { Person, PersonFromMongo } from '../../types';
+import { Person, PersonWithoutId } from '../../types';
 
-function fixDates(values: Required<Person>): Required<Person> {
+function fixDates(values: Required<PersonWithoutId>): Required<PersonWithoutId> {
   const fixed = { ...values };
 
   if (fixed.birth.date) {
     fixed.birth = { ...fixed.birth, date: new Date(fixed.birth.date) };
   }
-  if (fixed.death.date) {
-    fixed.death = { ...fixed.birth, date: new Date(fixed.death.date) };
-  }
+
+  fixed.events = fixed.events.map((e: Events) => ({
+    ...e,
+    date: typeof e.date === 'string' ? new Date(e.date) : e.date
+  }));
 
   return fixed;
 }
 
-const PersonForm: FC<{ data: Person | PersonFromMongo; onChange: (p: Person) => void }> = ({ data, onChange }) => {
+const PersonForm: FC<{ data: PersonWithoutId; onChange: (p: PersonWithoutId) => void }> = ({ data, onChange }) => {
   // Note that position: relative is required
   const { data: d } = usePersons();
   const persons = d?.persons;
 
-  const initialValues: Required<Person> = fixDates(
+  const initialValues: Required<PersonWithoutId> = fixDates(
     merge(
       {
         birth: { date: '', place: '' },
-        death: { date: '', place: '' },
-        deceased: false,
         events: [],
         father: null,
         gender: null,
@@ -47,13 +48,15 @@ const PersonForm: FC<{ data: Person | PersonFromMongo; onChange: (p: Person) => 
     )
   );
 
-  console.log(initialValues);
   const form = useForm({
     initialValues
   });
 
   return (
-    <form onSubmit={form.onSubmit(values => onChange(values))}>
+    <form
+      onSubmit={form.onSubmit(values => {
+        onChange(values);
+      })}>
       <Group mb="xs">
         <TextInput label="Name" {...form.getInputProps('name')} />
         <TextInput label="Surname" {...form.getInputProps('surname')} />
@@ -66,23 +69,16 @@ const PersonForm: FC<{ data: Person | PersonFromMongo; onChange: (p: Person) => 
         <DatePicker label="Date of birth" clearable {...form.getInputProps('birth.date')} />
         <TextInput label="Place of birth" {...form.getInputProps('birth.place')} />
       </Group>
-      <Checkbox label="Deceased" {...form.getInputProps('deceased')} mb="xs" checked={form.values.deceased} />
-      {form.values.deceased && (
-        <Group mb="xs">
-          <DatePicker label="Date of death" clearable {...form.getInputProps('death.date')} />
-          <TextInput label="Place of death" {...form.getInputProps('death.place')} />
-        </Group>
-      )}
       <SelectPerson
         label="Father"
-        id={(data as PersonFromMongo)._id}
+        id={(data as Person)._id}
         list={persons || []}
         filter={p => p.gender !== 'female'}
         {...form.getInputProps('father')}
       />
       <SelectPerson
         label="Mother"
-        id={(data as PersonFromMongo)._id}
+        id={(data as Person)._id}
         list={persons || []}
         filter={p => p.gender !== 'male'}
         {...form.getInputProps('mother')}
@@ -109,14 +105,32 @@ const PersonForm: FC<{ data: Person | PersonFromMongo; onChange: (p: Person) => 
           </Menu.Dropdown>
         </Menu>
       </Group>
+      {form.values.events.map((event, index) => {
+        const key = `${event.type}-${index}`;
+        let eventJsx;
+
+        if (event.type === 'death') {
+          eventJsx = (
+            <>
+              <Title order={4}>Death</Title>
+              <Group mb="xs">
+                <DatePicker label="Date of death" clearable {...form.getInputProps(`events.${index}.date`)} />
+                <TextInput label="Place of death" {...form.getInputProps(`events.${index}.place`)} />
+              </Group>
+            </>
+          );
+        } else {
+          eventJsx = (
+            <pre>
+              <code>{JSON.stringify(event, undefined, 2)}</code>
+            </pre>
+          );
+        }
+
+        return <div key={key}>{eventJsx}</div>;
+      })}
       <Group position="right" mt="md">
-        <Button
-          type="submit"
-          onClick={() => {
-            console.log('save');
-          }}>
-          Save
-        </Button>
+        <Button type="submit">Save</Button>
       </Group>
     </form>
   );

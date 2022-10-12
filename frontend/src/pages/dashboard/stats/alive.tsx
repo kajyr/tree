@@ -1,3 +1,4 @@
+import { deceased } from 'common';
 import { Person } from 'types';
 
 import React, { FC } from 'react';
@@ -6,7 +7,7 @@ import { RingProgress, Text } from '@mantine/core';
 
 const Alive: FC<{ list: Person[] }> = ({ list }) => {
   const tot = list.length;
-  const alive = list.filter(p => !p.deceased).length;
+  const alive = list.filter(p => !deceased(p)).length;
 
   const pA = (alive / tot) * 100;
 

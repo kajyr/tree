@@ -1,8 +1,13 @@
-type id = any;
+import { Maybe, id } from './';
+import { BasePerson } from './person';
 
 export interface LifeEvent {
-  date?: string;
+  date?: string | Date;
   place?: string;
+}
+
+export interface BirthEvent extends LifeEvent {
+  type: 'birth';
 }
 
 export interface WeddingEvent extends LifeEvent {
@@ -19,4 +24,12 @@ export interface ChildEvent extends LifeEvent {
   child?: id;
 }
 
-export type Events = WeddingEvent | DeathEvent | ChildEvent;
+export type Events = BirthEvent | WeddingEvent | DeathEvent | ChildEvent;
+
+export function deceased(person: BasePerson): Maybe<DeathEvent> {
+  return person.events?.find(e => e.type === 'death') as Maybe<DeathEvent>;
+}
+
+export function isDeathEvent(event: Maybe<Events>): event is DeathEvent {
+  return event?.type === 'death';
+}

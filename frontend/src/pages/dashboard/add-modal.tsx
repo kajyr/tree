@@ -1,5 +1,5 @@
 import { callJsonApi } from 'helpers/api';
-import { Person } from 'types';
+import { PersonWithoutId } from 'types';
 
 import { FC, useState } from 'react';
 import React from 'react';
@@ -13,7 +13,7 @@ const AddModal: FC<{ onComplete: () => void }> = ({ onComplete }) => {
   const [opened, setOpened] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  async function submit(person: Person) {
+  async function submit(person: PersonWithoutId) {
     setLoading(true);
 
     await callJsonApi('/api/person', { body: JSON.stringify(person), method: 'POST' });

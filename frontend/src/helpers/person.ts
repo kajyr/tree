@@ -1,14 +1,4 @@
-import { BasePerson } from 'types';
-
-export function name(p: BasePerson) {
-  const a = [p.name || 'Unknown'];
-
-  if (p.surname) {
-    a.push(p.surname);
-  }
-
-  return a.join(' ');
-}
+import { BasePerson } from 'common';
 
 export function initials(p: BasePerson) {
   const name = p.name || 'U';
