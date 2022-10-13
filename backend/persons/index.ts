@@ -1,21 +1,17 @@
-import { CytoscapeJSON, LifeEvent, deceased } from 'common';
+import { CytoscapeJSON, LifeEvent } from 'common';
 import { Collection, Db, ObjectId } from 'mongodb';
 import { Person } from 'types';
 
 import getCytoscapeJson from './cytoscape';
-import { mkDeathEvent } from './events';
+import setChildrenDate from './set-children-date';
+import { DAL } from './types';
+import setChildren from './update-children';
+import updateParents from './update-parents';
 
 const COLLECTION = 'persons';
 
-function getPersonFromBrody(body: Person & { death: LifeEvent }): Person {
-  const { name, surname, gender, father, mother, birth, death, events = [] } = body;
-
-  const deathEvent = deceased(body);
-
-  // TODO write test for this
-  if (!deathEvent && death) {
-    events.push(mkDeathEvent(death));
-  }
+function getPersonFromBody(body: Person & { death: LifeEvent }): Person {
+  const { name, surname, gender, father, mother, birth, events = [] } = body;
 
   return {
     birth,
@@ -25,6 +21,13 @@ function getPersonFromBrody(body: Person & { death: LifeEvent }): Person {
     mother: mother && new ObjectId(mother),
     name,
     surname
+  };
+}
+
+function mkDal(c: Collection): DAL {
+  return {
+    findOne: (_id: ObjectId) => c.findOne({ _id }),
+    findOneAndUpdate: (_id: ObjectId, update: Partial<Person>) => c.findOneAndUpdate({ _id }, { $set: update })
   };
 }
 
@@ -61,13 +64,19 @@ export default function (fastify, opts, done) {
       handler: async function (req) {
         const c = getCollection(fastify);
 
-        const p = { ...getPersonFromBrody(req.body), createdAt: Date.now(), updatedAt: Date.now() };
+        const p = { ...getPersonFromBody(req.body), createdAt: Date.now(), updatedAt: Date.now() };
 
         const response = await c.insertOne(p);
 
-        if (response.insertedId) {
-          return p;
+        if (!response.insertedId) {
+          return {};
         }
+
+        p._id = response.insertedId;
+        const dal = mkDal(c);
+        await setChildren(dal, p);
+        await updateParents(dal, p);
+
         return {};
       },
       method: 'POST',
@@ -82,11 +91,15 @@ export default function (fastify, opts, done) {
           throw new TypeError(`Invalid id: ${_id}`);
         }
 
-        const update = { ...getPersonFromBrody(req.body), updatedAt: Date.now() };
+        const update = { ...getPersonFromBody(req.body), updatedAt: Date.now() };
 
         const r = await c.findOneAndUpdate({ _id: new ObjectId(_id) }, { $set: update });
 
         if (r.value) {
+          const dal = mkDal(c);
+          await setChildren(dal, r.value);
+          await updateParents(dal, r.value);
+
           return r.value;
         }
 
@@ -136,6 +149,8 @@ export default function (fastify, opts, done) {
         if (mother) {
           response.mother = await c.findOne({ _id: new ObjectId(mother) });
         }
+        const dal = mkDal(c);
+        response.person = await setChildrenDate(dal, response.person);
 
         response.cytoscape = getCytoscapeJson(response.person, response.father, response.mother, children);
 

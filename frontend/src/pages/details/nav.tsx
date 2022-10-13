@@ -17,11 +17,25 @@ import placeholderMale from '../../organisms/card/placeholder-male.png';
 
 const labelMap: Record<string, string> = {
   birth: 'Birth',
+  child: 'Child',
   death: 'Death'
 };
 
 const Nav: FC<{ data: Api.DetailsResponse; onUpdate: () => void }> = ({ data, onUpdate }) => {
-  const events: Events[] = [{ type: 'birth', ...data.person.birth }, ...(data.person.events || [])];
+  //@ts-ignore
+  const events: Events[] = [{ type: 'birth', ...data.person.birth }]
+    .concat((data.person.events as Events[]) || [])
+    .sort((a, b) => {
+      // Turn your strings into dates, and then subtract them
+      // to get a value that is either negative, positive, or zero.
+      if (!b.date) {
+        return 1;
+      }
+      if (!a.date) {
+        return -1;
+      }
+      return new Date(a.date).getTime() - new Date(b.date).getTime();
+    });
   return (
     <Navbar width={{ base: 300 }} p="xs">
       <Navbar.Section>
@@ -50,6 +64,11 @@ const Nav: FC<{ data: Api.DetailsResponse; onUpdate: () => void }> = ({ data, on
             const title = labelMap[event.type] || 'Unknown';
             return (
               <Timeline.Item title={title} key={`${title}-${i}`}>
+                {'fullName' in event && event.fullName && (
+                  <Text size="xs" color="dimmed">
+                    {event.fullName}
+                  </Text>
+                )}
                 {event.date && (
                   <Text size="xs" color="dimmed">
                     {date(event.date)}

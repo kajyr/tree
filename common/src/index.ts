@@ -7,6 +7,7 @@ import {
   LifeEvent,
   WeddingEvent,
   deceased,
+  getChildEvents,
   isDeathEvent
 } from './life-events';
 import { BasePerson } from './person';
@@ -20,6 +21,7 @@ export {
   CytoscapeNode,
   DeathEvent,
   deceased,
+  getChildEvents,
   Events,
   isDeathEvent,
   LifeEvent,

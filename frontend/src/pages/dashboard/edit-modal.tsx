@@ -26,6 +26,7 @@ const EditModal: FC<{ data: Person; onComplete: () => void }> = ({ data, onCompl
   return (
     <>
       <Modal
+        size="lg"
         opened={opened}
         onClose={() => {
           setOpened(false), setLoading(false);

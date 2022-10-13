@@ -23,7 +23,7 @@ const logger = pino({
 
 const init = async () => {
   const server = await app({
-    logger: isDev ? logger : false,
+    logger: isDev ? false : false,
     mongoUrl: `mongodb://${mongoHost}`
   });
 

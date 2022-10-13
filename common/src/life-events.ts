@@ -33,3 +33,7 @@ export function deceased(person: BasePerson): Maybe<DeathEvent> {
 export function isDeathEvent(event: Maybe<Events>): event is DeathEvent {
   return event?.type === 'death';
 }
+
+export function getChildEvents(person: BasePerson): Maybe<ChildEvent[]> {
+  return person.events?.filter(e => e.type === 'child' && e.child) as Maybe<ChildEvent[]>;
+}

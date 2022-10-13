@@ -3,8 +3,8 @@ module.exports = {
   moduleDirectories: ['node_modules', 'frontend/src', 'backend'],
   moduleFileExtensions: ['js', 'ts', 'tsx'],
   setupFiles: [],
+  testEnvironmentOptions: { url: 'http://localhost/' },
   testMatch: ['**/*.test.{ts,tsx}'],
-  testURL: 'http://localhost/',
   transform: {
     '^.+\\.tsx?$': 'ts-jest'
   }

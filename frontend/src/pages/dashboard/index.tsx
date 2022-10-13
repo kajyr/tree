@@ -32,7 +32,7 @@ const Dashboard: FC = () => {
         <Alive list={data.persons} />
       </SimpleGrid>
       <Divider my="xs" label="Persons in the DB" />
-      <SimpleGrid cols={3}>
+      <SimpleGrid cols={4}>
         {data.persons.map(person => {
           return <PersonCard key={person._id} data={person} onUpdate={refetch} />;
         })}

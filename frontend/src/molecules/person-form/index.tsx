@@ -9,7 +9,7 @@ import SelectPerson from 'atoms/select-person';
 import { ActionIcon, Button, Group, Menu, Radio, Space, TextInput, Title } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
-import { IconBabyCarriage, IconCertificate, IconConfetti, IconSquarePlus } from '@tabler/icons';
+import { IconBabyCarriage, IconCertificate, IconConfetti, IconSquarePlus, IconX } from '@tabler/icons';
 
 import { Person, PersonWithoutId } from '../../types';
 
@@ -52,12 +52,16 @@ const PersonForm: FC<{ data: PersonWithoutId; onChange: (p: PersonWithoutId) => 
     initialValues
   });
 
+  console.log(form.values);
+
+  const canAddDeath = !deceased(form.values);
+
   return (
     <form
       onSubmit={form.onSubmit(values => {
         onChange(values);
       })}>
-      <Group mb="xs">
+      <Group mb="xs" position="apart" grow>
         <TextInput label="Name" {...form.getInputProps('name')} />
         <TextInput label="Surname" {...form.getInputProps('surname')} />
       </Group>
@@ -65,7 +69,7 @@ const PersonForm: FC<{ data: PersonWithoutId; onChange: (p: PersonWithoutId) => 
         <Radio value="male" label="Male" />
         <Radio value="female" label="Female" />
       </Radio.Group>
-      <Group mb="xs">
+      <Group mb="xs" position="apart" grow>
         <DatePicker label="Date of birth" clearable {...form.getInputProps('birth.date')} />
         <TextInput label="Place of birth" {...form.getInputProps('birth.place')} />
       </Group>
@@ -88,35 +92,63 @@ const PersonForm: FC<{ data: PersonWithoutId; onChange: (p: PersonWithoutId) => 
         <Title order={3}>Events</Title>
         <Menu shadow="md" width={200}>
           <Menu.Target>
-            <ActionIcon
-              color="blue"
-              size="sm"
-              onClick={() => {
-                console.log('add');
-              }}>
+            <ActionIcon color="blue" size="sm">
               <IconSquarePlus />
             </ActionIcon>
           </Menu.Target>
           <Menu.Dropdown>
             <Menu.Label>Add a life event</Menu.Label>
-            <Menu.Item icon={<IconBabyCarriage size={14} />}>Child</Menu.Item>
-            <Menu.Item icon={<IconConfetti size={14} />}>Wedding</Menu.Item>
-            <Menu.Item icon={<IconCertificate size={14} />}>Death</Menu.Item>
+            <Menu.Item
+              icon={<IconBabyCarriage size={14} />}
+              onClick={() => {
+                form.insertListItem('events', { type: 'child' });
+              }}>
+              Child
+            </Menu.Item>
+            <Menu.Item
+              icon={<IconConfetti size={14} />}
+              onClick={() => {
+                form.insertListItem('events', { type: 'wedding' });
+              }}>
+              Wedding
+            </Menu.Item>
+            <Menu.Item
+              onClick={() => {
+                form.insertListItem('events', { type: 'death' });
+              }}
+              disabled={!canAddDeath}
+              icon={<IconCertificate size={14} />}>
+              Death
+            </Menu.Item>
           </Menu.Dropdown>
         </Menu>
       </Group>
       {form.values.events.map((event, index) => {
         const key = `${event.type}-${index}`;
-        let eventJsx;
+        let eventJsx, title;
 
         if (event.type === 'death') {
+          title = 'Death';
+          eventJsx = (
+            <Group position="apart" grow>
+              <DatePicker label="Date of death" clearable {...form.getInputProps(`events.${index}.date`)} />
+              <TextInput label="Place of death" {...form.getInputProps(`events.${index}.place`)} />
+            </Group>
+          );
+        } else if (event.type === 'child') {
+          title = 'Child';
           eventJsx = (
             <>
-              <Title order={4}>Death</Title>
-              <Group mb="xs">
-                <DatePicker label="Date of death" clearable {...form.getInputProps(`events.${index}.date`)} />
-                <TextInput label="Place of death" {...form.getInputProps(`events.${index}.place`)} />
-              </Group>
+              <SelectPerson
+                label="Name"
+                list={persons || []}
+                filter={() => {
+                  // remove father, mother, spouses
+                  // remove anyone older
+                  return true;
+                }}
+                {...form.getInputProps(`events.${index}.child`)}
+              />
             </>
           );
         } else {
@@ -127,7 +159,17 @@ const PersonForm: FC<{ data: PersonWithoutId; onChange: (p: PersonWithoutId) => 
           );
         }
 
-        return <div key={key}>{eventJsx}</div>;
+        return (
+          <div key={key}>
+            <Group mb="xs" position="apart">
+              <Title order={4}>{title}</Title>
+              <ActionIcon onClick={() => form.removeListItem('events', index)}>
+                <IconX size={18} />
+              </ActionIcon>
+            </Group>
+            {eventJsx}
+          </div>
+        );
       })}
       <Group position="right" mt="md">
         <Button type="submit">Save</Button>
