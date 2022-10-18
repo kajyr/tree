@@ -22,6 +22,7 @@ export interface DeathEvent extends LifeEvent {
 export interface ChildEvent extends LifeEvent {
   type: 'child';
   child?: id;
+  fullName?: string;
 }
 
 export type Events = BirthEvent | WeddingEvent | DeathEvent | ChildEvent;
