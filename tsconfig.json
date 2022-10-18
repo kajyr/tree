@@ -9,7 +9,8 @@
     "moduleResolution": "node",
     "noImplicitAny": false,
     "paths": {
-      "helpers/*": ["helpers/*"]
+      "helpers/*": ["helpers/*"],
+      "common": ["./common/src"]
     },
     "lib": ["es2019", "dom", "dom.iterable"],
     "sourceMap": true,

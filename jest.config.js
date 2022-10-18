@@ -1,6 +1,6 @@
 module.exports = {
   coveragePathIgnorePatterns: ['/node_modules/', '/build/'],
-  moduleDirectories: ['node_modules', 'frontend/src', 'backend'],
+  moduleDirectories: ['common/src', 'node_modules', 'frontend/src', 'backend'],
   moduleFileExtensions: ['js', 'ts', 'tsx'],
   setupFiles: [],
   testEnvironmentOptions: { url: 'http://localhost/' },
