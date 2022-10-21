@@ -10,16 +10,28 @@ updates:
     schedule:
       interval: 'weekly'
     reviewers:
-      - "kajyr"
+      - "@kajyr"
+    open-pull-requests-limit: 3
   - package-ecosystem: 'npm' # See documentation for possible values
     directory: '/frontend' # Location of package manifests
     schedule:
       interval: 'weekly'
     reviewers:
       - "kajyr"
+    open-pull-requests-limit: 3
   - package-ecosystem: 'npm' # See documentation for possible values
     directory: '/common' # Location of package manifests
     schedule:
       interval: 'weekly'
     reviewers:
       - "kajyr"
+    open-pull-requests-limit: 3
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    labels:
+      - "dependencies"
+     reviewers:
+      - 'kajyr'
+    open-pull-requests-limit: 3
