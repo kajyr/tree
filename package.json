@@ -10,7 +10,8 @@
     "postinstall": "lerna bootstrap",
     "release": "lerna version",
     "lint": "eslint .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "start": "cd backend && npm start"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",

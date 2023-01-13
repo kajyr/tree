@@ -14,12 +14,11 @@ ENV NODE_ENV production
 
 WORKDIR /app
 
-COPY entrypoint.sh ./
 COPY --from=builder /app/public public
 COPY --from=builder /app/backend backend
-# COPY data data
+COPY --from=builder /app/common common
+COPY --from=builder /app/package.json ./
 
 WORKDIR /app
 EXPOSE 4445
-ENTRYPOINT ["./entrypoint.sh"]
-CMD [ "kledger-ui" ] 
+CMD [ "npm", "start" ] 
