@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "version": "1.0.0",
+  "version": "1.8.0",
   "main": "src/index.tsx",
   "license": "MIT",
   "dependencies": {
@@ -17,7 +17,7 @@
     "@typescript-eslint/eslint-plugin": "^5.40.1",
     "@typescript-eslint/parser": "^5.40.1",
     "buffer": "^6.0.3",
-    "common": "^1.0.0",
+    "common": "^1.8.0",
     "dayjs": "^1.11.5",
     "html-webpack-plugin": "^5.5.0",
     "merge-anything": "^5.0.4",
