@@ -35,6 +35,7 @@ const init = async () => {
   }
 
   console.log('----');
+  console.log('Listening to:', `http://localhost:${PORT}`);
   console.log('Server version:', pkg.version);
   console.log('Mongo server:', mongoHost);
   console.log();
